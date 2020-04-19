@@ -32,4 +32,3 @@ print(datetime.utcnow())
 
 print(query.values())
 print(query.keys())
-print(query.keys())
