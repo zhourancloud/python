@@ -7,6 +7,7 @@ import time
 http://www.360doc.com/content/16/0923/15/4958641_732609265.shtml
 """
 
+
 class DelayQueue:
     QUEUE_KEY = 'delay_queue'
     DATA_PREFIX = 'delay_queue_data'
