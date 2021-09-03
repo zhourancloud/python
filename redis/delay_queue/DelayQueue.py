@@ -14,6 +14,7 @@ class DelayQueue:
     def __init__(self, conf):
         self._redis_client = redis.Redis(host=conf['host'],
                                          port=conf['port'],
+                                         password=conf['password'],
                                          db=conf['db'])
 
     def push(self, msg):
@@ -22,7 +23,7 @@ class DelayQueue:
         self._redis_client.set(key, json.dumps(msg))
         self._redis_client.zadd(self.QUEUE_KEY, key, int(time.time()))
 
-    def pop(self, num, previous):
+    def pop(self, num, previous=0):
         """
         :param num: pop 多少条数据
         :param previous: 获取多少秒前的数据
@@ -51,16 +52,26 @@ class DelayQueue:
         return data
 
 
+def test():
+    task_list = ['123', '345', '567']
+    zz = list(zip(task_list, ['1', '2', '3']))
+    print(zz)
+
+    data_keys = [
+        key
+        for key, flag in zip(task_list, [None, '2', '3'])
+        if flag
+    ]
+    print(data_keys)
+
+
 if __name__ == "__main__":
-    queue = DelayQueue({'host': '120.78.127.165', 'port': 6379, 'db': 0})
+    queue = DelayQueue({'host': '120.78.127.165', 'port': 6379, 'password': '123456', 'db': 0})
     for i in range(20):
         item = {
             'user': 'user-{}'.format(i)
         }
         queue.push(item)
-
-    data = queue.pop(num=10)
-    assert len(data) == 0
 
     time.sleep(10)
     data = queue.pop(num=10)
